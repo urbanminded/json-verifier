@@ -5,8 +5,8 @@ require __DIR__ . '/vendor/autoload.php';
 use JSONVerifier\Verifier;
 
 $v = new Verifier;
-$v->registerMappedPattern('date', '/\d{4}-\d{2}-\d{2}/', function($str) {
-    return new \DateTimeImmutable($str);
+$v->registerMappedPattern('date', '/\d{4}-\d{2}-\d{2}/', function($ctx, $str) {
+    return $ctx->value(new \DateTimeImmutable($str));
 });
 
 $obj = $v->verifyObject([

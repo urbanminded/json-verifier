@@ -4,6 +4,7 @@ namespace JSONVerifier;
 
 use JSONVerifier\Mappers\Any;
 use JSONVerifier\Mappers\ArrayTypeChecker;
+use JSONVerifier\Mappers\CallbackMapper;
 use JSONVerifier\Mappers\Mapper;
 use JSONVerifier\Mappers\NullTypeChecker;
 use JSONVerifier\Mappers\ObjectTypeChecker;
@@ -41,7 +42,13 @@ class Verifier {
         return $mapper;
     }
 
-    public function registerMapper(string $name, Mapper $mapper) {
+    public function registerMapper(string $name, $mapper) {
+        if (is_callable($mapper)) {
+            $mapper = new CallbackMapper($mapper);
+        }
+        if (!($mapper instanceof Mapper)) {
+            throw new UsageException("mapper must be an instance of " . Mapper::class);
+        }
         if (isset($this->types[$name])) {
             throw new UsageException("duplicate type: $name");
         }

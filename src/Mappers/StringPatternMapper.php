@@ -21,6 +21,6 @@ class StringPatternMapper implements Mapper {
         if (!preg_match($this->pattern, $value, $m)) {
             return $ctx->error("pattern match failed");
         }
-        return $ctx->value(($this->callback)($value, $m));
+        return ($this->callback)($ctx, $value, $m);
     }
 }
